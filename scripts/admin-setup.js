@@ -3,12 +3,12 @@ import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10
 
 // Deine Firebase-Konfig
 const firebaseConfig = {
-  apiKey: "DEINE_API_KEY",
-  authDomain: "DEIN_PROJECT_ID.firebaseapp.com",
-  projectId: "DEIN_PROJECT_ID",
-  storageBucket: "DEIN_PROJECT_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+apiKey: "AIzaSyClBhphyNWbDdrEJhKl8CoGfI6iL6MEnSI",
+  authDomain: "territorial-io.firebaseapp.com",
+  projectId: "territorial-io",
+  storageBucket: "territorial-io.appspot.com",
+  messagingSenderId: "832260574713",
+  appId: "1:832260574713:web:e59ce072e28e8e2353c128",
 };
 
 const app = initializeApp(firebaseConfig);

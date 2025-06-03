@@ -1,4 +1,4 @@
-import { auth } from './firebase-config.js';
+import { auth, db } from './firebase-config.js';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,19 +7,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 import {
-  getFirestore, doc, setDoc, getDocs, collection, updateDoc
+  collection, getDocs, doc, setDoc, updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const db = getFirestore();
-
-// Registrierung + Land vergeben
+// Registrierung + automatisches Land
 export function register(email, password) {
   createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCredential) => {
       const user = userCredential.user;
-      console.log("User registriert:", user.email);
 
-      // Freies Land suchen
+      // Prüfen ob ein freies Land existiert
       const countriesSnapshot = await getDocs(collection(db, "countries"));
       let freeCountry = null;
 
@@ -30,10 +27,51 @@ export function register(email, password) {
       });
 
       if (freeCountry) {
-        // Land dem neuen User geben
         await updateDoc(doc(db, "countries", freeCountry), {
           owner: user.email,
           troops: 10,
           buildingLevel: 1
         });
-        alert(`Account erst
+        alert(`Account erstellt & Land ${freeCountry} zugewiesen!`);
+      } else {
+        const newCountryId = `country_${Date.now()}`;
+        await setDoc(doc(db, "countries", newCountryId), {
+          countryId: newCountryId,
+          owner: user.email,
+          troops: 10,
+          buildingLevel: 1
+        });
+        alert(`Account erstellt & neues Land ${newCountryId} erzeugt!`);
+      }
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+}
+
+export function login(email, password) {
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      alert("Login erfolgreich!");
+      window.location.href = "game.html";
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+}
+
+export function logout() {
+  signOut(auth)
+    .then(() => {
+      alert("Abgemeldet.");
+      window.location.href = "index.html";
+    });
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Eingeloggt: ", user.email);
+  } else {
+    console.log("Kein User.");
+  }
+});

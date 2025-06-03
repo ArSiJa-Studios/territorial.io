@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Warfare Login</title>
+  <script type="module" src="./scripts/auth.js"></script>
+</head>
+<body>
+  <h1>Login / Registrierung</h1>
+  
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Passwort">
+  <br>
+  <button onclick="registerUser()">Registrieren</button>
+  <button onclick="loginUser()">Login</button>
+  
+  <script type="module">
+    import { register, login } from './scripts/auth.js';
+
+    window.registerUser = () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      register(email, password);
+    };
+
+    window.loginUser = () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      login(email, password);
+    };
+  </script>
+</body>
+</html>

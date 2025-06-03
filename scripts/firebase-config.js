@@ -1,9 +1,7 @@
-// Import Firebase SDKs
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Firebase-Konfig
 const firebaseConfig = {
   apiKey: "AIzaSyClBhphyNWbDdrEJhKl8CoGfI6iL6MEnSI",
   authDomain: "territorial-io.firebaseapp.com",
@@ -14,9 +12,6 @@ const firebaseConfig = {
   measurementId: "G-1E3W7VD4ZX"
 };
 
-// Firebase initialisieren
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-// Auth-Dienst initialisieren & exportieren
 export const auth = getAuth(app);
+export const db = getFirestore(app);

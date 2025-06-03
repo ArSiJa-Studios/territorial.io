@@ -2,18 +2,16 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Warfare Login</title>
+  <title>Login & Register</title>
   <script type="module" src="./scripts/auth.js"></script>
 </head>
 <body>
   <h1>Login / Registrierung</h1>
-  
   <input id="email" type="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Passwort">
-  <br>
+  <input id="password" type="password" placeholder="Passwort"><br>
   <button onclick="registerUser()">Registrieren</button>
   <button onclick="loginUser()">Login</button>
-  
+
   <script type="module">
     import { register, login } from './scripts/auth.js';
 

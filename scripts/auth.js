@@ -6,43 +6,34 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// Registrierung
+import {
+  getFirestore, doc, setDoc, getDocs, collection, updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const db = getFirestore();
+
+// Registrierung + Land vergeben
 export function register(email, password) {
   createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      alert("Registrierung erfolgreich!");
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-}
+    .then(async (userCredential) => {
+      const user = userCredential.user;
+      console.log("User registriert:", user.email);
 
-// Login
-export function login(email, password) {
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      alert("Login erfolgreich!");
-      window.location.href = "game.html"; // z.B. Spielseite
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-}
+      // Freies Land suchen
+      const countriesSnapshot = await getDocs(collection(db, "countries"));
+      let freeCountry = null;
 
-// Logout
-export function logout() {
-  signOut(auth)
-    .then(() => {
-      alert("Abgemeldet.");
-      window.location.href = "index.html";
-    });
-}
+      countriesSnapshot.forEach((docSnap) => {
+        if (!freeCountry && docSnap.data().owner === "") {
+          freeCountry = docSnap.id;
+        }
+      });
 
-// User-Session überwachen
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("User eingeloggt: ", user.email);
-  } else {
-    console.log("Kein User eingeloggt.");
-  }
-});
+      if (freeCountry) {
+        // Land dem neuen User geben
+        await updateDoc(doc(db, "countries", freeCountry), {
+          owner: user.email,
+          troops: 10,
+          buildingLevel: 1
+        });
+        alert(`Account erst
